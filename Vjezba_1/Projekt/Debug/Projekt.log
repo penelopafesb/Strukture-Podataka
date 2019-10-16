@@ -1,0 +1,7 @@
+﻿  Source.c
+c:\users\marin\desktop\vježbe c\projekt\projekt\source.c(33): warning C4133: 'function': incompatible types - from 'FILE *' to 'char *'
+c:\users\marin\desktop\vježbe c\projekt\projekt\source.c(36): warning C4133: 'function': incompatible types - from 'FILE *' to 'char *'
+c:\users\marin\desktop\vježbe c\projekt\projekt\source.c(37): warning C4133: 'function': incompatible types - from 'FILE *' to 'char *'
+c:\users\marin\desktop\vježbe c\projekt\projekt\source.c(38): warning C4133: 'function': incompatible types - from 'FILE *' to 'char *'
+c:\users\marin\desktop\vježbe c\projekt\projekt\source.c(24): warning C4101: 'i': unreferenced local variable
+  Projekt.vcxproj -> C:\Users\marin\Desktop\vježbe c\Projekt\Debug\Projekt.exe
