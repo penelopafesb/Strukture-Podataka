@@ -1,7 +1,6 @@
+#define _CRT_SECURE_NO_WARNINGS
 #include<stdio.h>
 #include<malloc.h>
-#define _CRT_SECURE_NO_WARNINGS
-#pragma warning(disable:4996)
 #include<string.h>
 #define MAX 20
 
@@ -13,10 +12,10 @@ typedef struct {
 
 }student;
 
-int broji_retke(FILE* ime_dat);
-int citaj(FILE* ime_dat, student *s, int n);
-int prosjek(FILE* ime_dat, student *s, int n, int max);
-int ispis(FILE* ime_dat, student *s, int n);
+int broji_retke(char* ime_dat);
+int citaj(char* ime_dat, student *s, int n);
+int prosjek(char* ime_dat, student *s, int n, int max);
+int ispis(char* ime_dat, student *s, int n);
 
 int main()
 {
@@ -42,7 +41,7 @@ int main()
 	return 0;
 }
 
-int broji_retke(FILE* ime_dat)
+int broji_retke(char* ime_dat)
 {
 	int znak = 0;
 	int br = 0;
@@ -64,7 +63,7 @@ int broji_retke(FILE* ime_dat)
 	return br;
 }
 
-int citaj(FILE* ime_dat, student *s, int n)
+int citaj(char* ime_dat, student *s, int n)
 {
 	int i, max;
 
@@ -92,7 +91,7 @@ int citaj(FILE* ime_dat, student *s, int n)
 	return max;
 }
 
-int prosjek(FILE* ime_dat, student *s, int n, int max)
+int prosjek(char* ime_dat, student *s, int n, int max)
 {
 	int i;
 
@@ -109,7 +108,7 @@ int prosjek(FILE* ime_dat, student *s, int n, int max)
 	return 0;
 }
 
-int ispis(FILE* ime_dat, student *s, int n)
+int ispis(char* ime_dat, student *s, int n)
 {
 	int i;
 
