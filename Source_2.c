@@ -21,7 +21,7 @@ int UnosKraj(student *);
 student* PronadiZadnji(student*);
 student* PronadiPrezime(student*, char*);
 student* PronadiPrethodni(student*, student*);
-int Obrisi(student *, char *);
+int Obrisi(student *, student *);
 int DodajIzaElementa(student*, student*);
 int DodajIspredElementa(student*, student*, student*);
 
