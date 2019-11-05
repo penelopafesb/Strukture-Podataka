@@ -11,19 +11,22 @@ typedef struct _student {
 	char prezime[MAX];
 	int godina;
 
-	struct _student * next;
+	struct _student* next;
 }student;
 
-int Menu(student *);
-int UnosPocetak(student *);
-int Ispis(student *);
-int UnosKraj(student *);
+int Menu(student*);
+int UnosPocetak(student*);
+int Ispis(student*);
+int UnosKraj(student*);
 student* PronadiZadnji(student*);
 student* PronadiPrezime(student*, char*);
 student* PronadiPrethodni(student*, student*);
-int Obrisi(student *, student *);
+int Obrisi(student*, student*);
 int DodajIzaElementa(student*, student*);
-int DodajIspredElementa(student*, student*, student*);
+int DodajIspredElementa(student*, student*);
+int Sortiraj(student*);
+int CitajIzDat(student*);
+int PisiuDat(student*);
 
 int main()
 {
@@ -35,14 +38,14 @@ int main()
 	do {
 		status = Menu(head);
 	} while (!status);
-		
+
 	return 0;
 }
 
-int Menu(student *head)
+int Menu(student* head)
 {
 	int izbor = 0;
-	
+
 	char prezime[MAX];
 	student* nadi_prezime = NULL;
 	nadi_prezime = (student*)malloc(sizeof(student));
@@ -58,9 +61,7 @@ int Menu(student *head)
 	char ispred[MAX];
 	student* dodaj_ispred = NULL;
 	dodaj_ispred = (student*)malloc(sizeof(student));
-	student* prethodni = NULL;
-	prethodni = (student*)malloc(sizeof(student));
-
+	
 	printf("*******************************************\n");
 	printf("1 - Unos elementa na pocetak\n");
 	printf("2 - Unos elementa na kraj\n");
@@ -69,7 +70,10 @@ int Menu(student *head)
 	printf("5 - Izbrisi prezime\n");
 	printf("6 - Dodaj element iza\n");
 	printf("7 - Dodaj element ispred\n");
-	printf("9 - Iskljuci program\n");
+	printf("8 - Sortiraj listu\n");
+	printf("9 - Citaj iz datoteke\n");
+	printf("10 - Pisi u datoteku\n");
+	printf("11 - Iskljuci program\n");
 	printf("*******************************************\n");
 
 	while (1) {
@@ -99,23 +103,31 @@ int Menu(student *head)
 			Obrisi(head, obrisi_el);
 			break;
 
-		case (6): printf("\n\nIza kojeg prezimena zelite dodati element? ");
+		case (6): printf("\nIza kojeg prezimena zelite dodati element? ");
 			scanf("%s", iza);
 			dodaj_iza = PronadiPrezime(head, iza);
 			DodajIzaElementa(head, dodaj_iza);
 			break;
 
-		case(7): printf("\n\nIspred kojeg elementa zelite dodati prezime? ");
+		case(7): printf("\nIspred kojeg elementa zelite dodati prezime? ");
 			scanf("%s", ispred);
 			dodaj_ispred = PronadiPrezime(head, ispred);
-			prethodni = (head, dodaj_ispred);
-			DodajIspredElementa(head, dodaj_ispred, prethodni);
+			DodajIspredElementa(head, dodaj_ispred);
 			break;
 
-		case(0): 
+		case(8): Sortiraj(head);
+			break;
+
+		case(9): CitajIzDat(head);
+			break;
+
+		case(10): PisiuDat(head);
+			break;
+
+		case(0):
 			return 0;
 
-		case (9):
+		case (11):
 			return 1;
 
 		default: printf("\n\nKrivi unos! Pokusajte ponovo.");
@@ -125,9 +137,9 @@ int Menu(student *head)
 	return 0;
 }
 
-int UnosPocetak(student *head)
+int UnosPocetak(student* head)
 {
-	student *s;
+	student* s;
 	s = (student*)malloc(sizeof(student));
 
 	s->next = head->next;
@@ -144,16 +156,16 @@ int UnosPocetak(student *head)
 	return 0;
 }
 
-int Ispis(student *head)
+int Ispis(student* head)
 {
-	student *s = head->next;
+	student* s = head->next;
 
 	printf("\n***************VASA LISTA**************\n");
 	while (s != NULL) {
 		printf("\tIme: %s", s->ime);
 		printf("\n\tPrezime: %s", s->prezime);
-		printf("\n\tGodina rodenja: %d", s->godina);
-		printf("\n\n");
+		printf("\n\tGodina rodenja: %d\n", s->godina);
+		printf("\n");
 		s = s->next;
 	}
 	printf("****************************************");
@@ -161,11 +173,11 @@ int Ispis(student *head)
 	return 0;
 }
 
-int UnosKraj(student *head)
+int UnosKraj(student* head)
 {
-	student *s;
+	student* s;
 	s = (student*)malloc(sizeof(student));
-	student *p;
+	student* p;
 	p = (student*)malloc(sizeof(student));
 
 	p = PronadiZadnji(head);
@@ -181,12 +193,12 @@ int UnosKraj(student *head)
 	scanf("%d", &s->godina);
 	printf("\n");
 
-	return 0;	
+	return 0;
 }
 
-student* PronadiZadnji(student *head)
+student* PronadiZadnji(student* head)
 {
-	student *p = head;
+	student* p = head;
 
 	while (p != NULL && p->next != NULL)
 		p = p->next;
@@ -194,9 +206,9 @@ student* PronadiZadnji(student *head)
 	return p;
 }
 
-student* PronadiPrezime(student *head, char *prezime)
+student* PronadiPrezime(student* head, char* prezime)
 {
-	student *P = head->next;
+	student* P = head->next;
 
 	while (P != NULL && strcmp(P->prezime, prezime))
 		P = P->next;
@@ -204,29 +216,29 @@ student* PronadiPrezime(student *head, char *prezime)
 	return P;
 }
 
-student* PronadiPrethodni(student *head, student *element)
+student* PronadiPrethodni(student* head, student* element)
 {
-	student *P;
+	student* P;
 	P = (student*)malloc(sizeof(student));
 	P = head;
-		
+
 	while (P != NULL && P->next != element)
 		P = P->next;
 
 	return P;
 }
 
-int Obrisi(student *head, student *element)
+int Obrisi(student* head, student* element)
 {
-	student *P = NULL;
-	student *q = NULL;
+	student* P = NULL;
+	student* q = NULL;
 	P = (student*)malloc(sizeof(student));
 	q = (student*)malloc(sizeof(student));
 	q = element;
 
 	P = PronadiPrethodni(head, element);
 	P->next = q->next;
-	
+
 	free(q);
 
 	return 0;
@@ -251,10 +263,17 @@ int DodajIzaElementa(student* head, student* element)
 	return 0;
 }
 
-int DodajIspredElementa(student* head, student* element, student* prethodni)
+int DodajIspredElementa(student* head, student* element)
 {
 	student* novi;
 	novi = (student*)malloc(sizeof(student));
+	student *P = NULL;
+	P = (student*)malloc(sizeof(student));
+
+	P = PronadiPrethodni(head, element);
+
+	P->next = novi;
+	novi->next = element;
 
 	printf("Unesite ime: ");
 	scanf("%s", novi->ime);
@@ -263,9 +282,99 @@ int DodajIspredElementa(student* head, student* element, student* prethodni)
 	printf("Unesite godinu rodenja: ");
 	scanf("%d", &novi->godina);
 	printf("\n");
+	
+	return 0;
+}
 
-	novi->next = prethodni->next;
-	prethodni->next = novi;
+int Sortiraj(student * head)
+{
+	student * p = head;
+	student * q = NULL;
+	student * pret_q = NULL;
+	student * zadnji = NULL;
+
+	while (p->next != zadnji)
+	{
+		pret_q = p;
+		q = pret_q->next;
+
+		while (q->next != zadnji)
+		{
+			if (strcmp(q->prezime, q->next->prezime) > 0)
+			{
+				pret_q->next = q->next;
+				q->next = q->next->next;
+				pret_q->next->next = q;
+				q = pret_q->next;
+			}
+			pret_q = q;
+			q = q->next;
+		}
+		zadnji = q;
+	}
+
+	return 0;
+}
+
+int CitajIzDat(student* head)
+{
+	student* q;
+	student* p = PronadiZadnji(head);
+	
+	FILE* fp = NULL;
+	fp = fopen("student.txt", "r");
+
+	int znak = 0;
+	int broj = 0;
+	int i = 0;
+	char buffer[MAX] = { 0 };
+
+	if (fp == NULL) {
+		printf("Greska u otvaranju datoteke!\n");
+		return -1;
+	}
+
+	while (fgets(buffer, MAX, fp)) {
+		broj++;
+	}
+
+	rewind(fp);
+
+	for(i=0; i<broj; i++){
+		q = (student*)malloc(sizeof(student));
+
+		q->next = NULL;
+		p->next = q;
+		p = p->next;
+
+		fscanf(fp, "%s %s %d", q->ime, q->prezime, &q->godina);		
+	}
+
+	fclose(fp);
+
+	return 0;
+}
+
+int PisiuDat(student* head)
+{
+	student* q = NULL;
+	q = (student*)malloc(sizeof(student));
+	q = head->next;
+
+	FILE* fp = NULL;
+	fp = fopen("penelopa.txt", "w");
+
+	if (fp == NULL) {
+		printf("Greska u otvaranju datoteke!\n");
+		return -1;
+	}
+	
+	while (q != NULL) {
+		fprintf(fp, "Ime: %s \tPrezime: %s \tGodina: %d\n", q->ime, q->prezime, q->godina);
+		q = q->next;
+	}
+
+	fclose(fp);
 
 	return 0;
 }
