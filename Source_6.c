@@ -2,7 +2,7 @@
 #include<stdio.h>
 #include<malloc.h>
 #include<stdlib.h>
-#define MAX 30
+#define MAX 1024
 
 struct _cvor {
 	int element;
@@ -20,7 +20,6 @@ int Pop(Pozicija);
 void Ispis(head);
 int PopRed(Pozicija);
 
-
 int main()
 {
 	Pozicija head_stog;
@@ -28,33 +27,50 @@ int main()
 	head_stog = (Pozicija)malloc(sizeof(Cvor));
 	head_red = (Pozicija)malloc(sizeof(Cvor));
 
-	int i, br1, br2, br3, br4;
-	
-	PushPrvi(head_stog);
-	for (i = 0; i < 13; i++)
-		Push(head_stog);
+	head_stog->next = NULL;
+	head_red->next = NULL;
 
-	printf("Ovo je stog\n");
+	int i, stog[MAX], red[MAX], s_gen, r_gen, s_pop, r_pop;
+	
+	do {
+		printf("Koliko clanova stoga zelite generirati [MAX 1024]? ");
+		scanf(" %d", &s_gen);
+	} while (s_gen<=0 || s_gen>MAX);
+
+		for (i = 0; i < s_gen; i++)
+			Push(head_stog);
+
 	Ispis(head_stog);
 
-	br1 = Pop(head_stog);
-	br2 = Pop(head_stog);
+	do {
+		printf("\nKoliko elemenata stoga zelite izbrisati? ");
+		scanf(" %d", &s_pop);
+	} while (s_pop<0 || s_pop>s_gen);
 
-	printf("\n");
+		for (i = 0; i < s_pop; i++)
+			stog[i] = Pop(head_stog);
+
 	Ispis(head_stog);
 	printf("\n");
 	
-	PushPrvi(head_red);
-	for (i = 0; i < 3; i++) 
-		Push(head_red);
+	do {
+		printf("\nKoliko clanova reda zelite generirati[MAX 1024]? ");
+		scanf(" %d", &r_gen);
+	} while (r_gen<=0 || r_gen>MAX);
 
-	printf("Ovo je red\n");
+		for (i = 0; i < r_gen; i++)
+			Push(head_red);
+
 	Ispis(head_red);
 
-	br3 = PopRed(head_red);
-	br4 = PopRed(head_red);
+	do {
+		printf("\nKoliko elemenata reda zelite izbrisati? ");
+		scanf(" %d", &r_pop);
+	} while (r_pop<0 || r_pop>r_gen);
 
-	printf("\n");
+		for (i = 0; i < r_pop; i++)
+			red[i] = PopRed(head_red);
+
 	Ispis(head_red);
 
 	return 0;
@@ -72,7 +88,6 @@ int RandomGen()
 Pozicija PronadiZadnji(Pozicija head)
 {
 	Pozicija p;
-	p = (Pozicija)malloc(sizeof(Cvor));
 	p = head;
 
 	while (p->next != NULL)
@@ -81,24 +96,11 @@ Pozicija PronadiZadnji(Pozicija head)
 	return p;
 }
 
-void PushPrvi(Pozicija head)
-{
-	Pozicija q;
-	q = (Pozicija)malloc(sizeof(Cvor));
-
-	q->element = RandomGen();
-
-	q->next = NULL;
-	head->next = q;
-
-}
-
 void Push(Pozicija head)
 {
 	Pozicija q;
 	Pozicija zadnji;
 	q = (Pozicija)malloc(sizeof(Cvor));
-	zadnji = (Pozicija)malloc(sizeof(Cvor));
 
 	zadnji = PronadiZadnji(head);
 
@@ -112,8 +114,6 @@ void Push(Pozicija head)
 int Pop(Pozicija head)
 {
 	Pozicija q, zadnji;
-	q = (Pozicija)malloc(sizeof(Cvor));
-	zadnji = (Pozicija)malloc(sizeof(Cvor));
 	int x;
 
 	zadnji = PronadiZadnji(head);
@@ -132,7 +132,6 @@ int Pop(Pozicija head)
 void Ispis(Pozicija head)
 {
 	Pozicija q;
-	q = (Pozicija)malloc(sizeof(Cvor));
 	q = head->next;
 
 	while (q != NULL) {
@@ -144,7 +143,6 @@ void Ispis(Pozicija head)
 int PopRed(Pozicija head)
 {
 	Pozicija temp;
-	temp = (Pozicija)malloc(sizeof(Cvor));
 	int x;
 
 	temp = head->next;
