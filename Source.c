@@ -2,6 +2,7 @@
 #include<stdio.h>
 #include<malloc.h>
 #include<string.h>
+#include<ctype.h>
 #define MAX 20
 
 typedef struct {
@@ -9,7 +10,6 @@ typedef struct {
 	char ime[MAX];
 	char prezime[MAX];
 	float prosjek;
-
 }student;
 
 int broji_retke(char* ime_dat);
