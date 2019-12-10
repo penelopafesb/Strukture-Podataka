@@ -1,7 +1,3 @@
-/**4. Napisati program za zbrajanje i množenje polinoma. Koeficijenti i eksponenti se
-èitaju iz datoteke.
-Napomena: Eksponenti u datoteci nisu nužno sortirani**/
-
 #define _CRT_SECURE_NO_WARNINGS
 #include<stdio.h>
 #include<malloc.h>
@@ -9,59 +5,65 @@ Napomena: Eksponenti u datoteci nisu nužno sortirani**/
 #include<ctype.h>
 #define MAX 25
 
-struct Polinom;
-typedef struct Polinom _Polinom;
-typedef struct Polinom* Poli;
 struct Polinom {
 	int koef;
 	int pot;
-	Poli next;
+	struct Polinom *next;
 };
+typedef struct Polinom* Poli;
+
 
 int Unos(Poli);
 int UnosSume(Poli, int, int);
-Poli Stvori(Poli*);
+Poli Stvori(Poli);
 int Ispis(Poli);
 int Suma(Poli, Poli, Poli);
 int Umnozak(Poli, Poli, Poli);
+int SortirajUmnozak(Poli);
 
 int main()
 {
-	struct Polinom P1, P2, S, U;
+	Poli P1, P2, S, U;
 
-	P1.next = NULL;
-	P2.next = NULL;
-	S.next = NULL;
-	U.next = NULL;
+	P1 = (Poli)malloc(sizeof(struct Polinom));
+	P2= (Poli)malloc(sizeof(struct Polinom));
+	S = (Poli)malloc(sizeof(struct Polinom));
+	U = (Poli)malloc(sizeof(struct Polinom));
 
-	Unos(&P1);
-	Unos(&P2);
+	P1->next = NULL;
+	P2->next = NULL;
+	S->next = NULL;
+	U->next = NULL;
 
-	Ispis(&P1);
-	Ispis(&P2);
+	Unos(P1);
+	Ispis(P1);
 
-	Suma(&P1, &P2, &S);
+	Unos(P2);
+	Ispis(P2);
+
+	Suma(P1, P2, S);
 	printf("\nSuma polinoma:\n");
-	Ispis(&S);
+	Ispis(S);
 
-	Umnozak(&P1, &P2, &U);
+	Umnozak(P1, P2, U);
+	SortirajUmnozak(U);
 	printf("\nUmnozak polinoma:\n");
-	Ispis(&U);
+	Ispis(U);
 
 	return 0;
 }
 
-Poli Stvori(Poli* head)
+Poli Stvori(Poli head)
 {
 	Poli q;
+	q = (Poli)malloc(sizeof(struct Polinom));
 
-	*head = (Poli)malloc(sizeof(_Polinom));
-	if (*head == NULL) {
+	if (head == NULL) {
 		printf("\nGreska u alokaciji memorije!\n");
 	}
 
-	q = *head;
-	q->next = NULL;
+	q->next = head->next;
+	head->next = q;
 
 	return q;
 }
@@ -70,7 +72,7 @@ int Unos(Poli P)
 {
 	Poli q;
 	Poli temp = NULL;
-	temp = (Poli)malloc(sizeof(Poli));
+	q = (Poli)malloc(sizeof(struct Polinom));
 
 	temp = P;
 
@@ -93,7 +95,7 @@ int Unos(Poli P)
 
 	while (!feof(fp)) {
 
-		q = Stvori(&q);
+		q = Stvori(q);
 
 		fscanf(fp, " %d %d", &q->koef, &q->pot);
 
@@ -101,12 +103,10 @@ int Unos(Poli P)
 			temp = temp->next;
 		if (temp->next != NULL && temp->next->pot == q->pot) {
 			temp->next->koef += q->koef;
-			free(q);
 
 			if (temp->next->koef == 0) {
 				q = temp->next;
 				temp->next = q->next;
-				free(q);
 			}
 		}
 		else {
@@ -141,7 +141,7 @@ int UnosSume(Poli S, int k, int p)
 	while (S->next != NULL && S->next->pot > p)
 		S = S->next;
 	
-	q = (Poli)malloc(sizeof(_Polinom));
+	q = (Poli)malloc(sizeof(struct Polinom));
 	q->koef = k;
 	q->pot = p;
 	q->next = S->next;
@@ -154,7 +154,7 @@ int UnosSume(Poli S, int k, int p)
 int Suma(Poli P1, Poli P2, Poli S)
 {
 	Poli temp = NULL;
-	temp = (Poli)malloc(sizeof(_Polinom));
+	temp = (Poli)malloc(sizeof(struct Polinom));
 	P1 = P1->next;
 	P2 = P2->next;
 
@@ -190,11 +190,33 @@ int Suma(Poli P1, Poli P2, Poli S)
 	return 0;
 }
 
+int SortirajUmnozak(Poli u)
+{
+	Poli temp;
+	temp = (Poli)malloc(sizeof(struct Polinom));
+
+	u = u->next;
+	temp = u->next;
+
+	while (u != NULL && temp!=NULL) {
+		if(u->pot == temp->pot) {
+			u->koef = u->koef + temp->koef;
+			u->next = temp->next;
+			free(temp);
+			temp = u->next;
+		}	
+		else {
+			u = u->next;
+			temp = temp->next;
+		}
+	}
+
+	return 0;
+}
 
 int Umnozak(Poli p1, Poli p2, Poli u)
 {
 	Poli temp;
-	temp = (Poli)malloc(sizeof(_Polinom));
 	p1 = p1->next;
 	p2 = p2->next;
 	temp = p2->next;
