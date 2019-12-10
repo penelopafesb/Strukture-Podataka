@@ -219,7 +219,6 @@ student* PronadiPrezime(student* head, char* prezime)
 student* PronadiPrethodni(student* head, student* element)
 {
 	student* P;
-	P = (student*)malloc(sizeof(student));
 	P = head;
 
 	while (P != NULL && P->next != element)
